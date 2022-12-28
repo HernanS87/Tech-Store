@@ -5,26 +5,30 @@ import { useAdminContext } from "../context/AdminContext";
 export default function AdminForm() {
   const stockRef = collection(db, "stock");
   const { categories } = useAdminContext();
-  console.log(categories.sort());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const image = await uploadImage(e.target.image.files[0]);
-    console.log("esta es la constante", image);
+    console.log(e.target.price.value);
 
     addDoc(stockRef, {
       name: e.target.name.value,
+      category: e.target.category.value,
       description: e.target.description.value,
       price: e.target.price.value,
       img: image,
     });
 
+    e.target.name.value = "";
+    e.target.price.value = "";
+    e.target.description.value = "";
     e.target.image.value = null;
+    e.target.category.value = "";
   };
 
   return (
     <form
-      className="p-2 flex flex-col h-screen bg-slate-400"
+      className="p-2 flex flex-col flex-1 h-screen bg-slate-400"
       onSubmit={handleSubmit}
     >
       <label htmlFor="name">Nombre del producto</label>
@@ -40,7 +44,7 @@ export default function AdminForm() {
         aria-placeholder="Categoría"
         className="border-2 my-2"
       >
-        <option value="" ></option>
+        <option value=""></option>
         {categories.sort().map((elem) => (
           <option key={elem} value={elem}>
             {elem}
