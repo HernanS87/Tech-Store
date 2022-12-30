@@ -28,7 +28,7 @@ export default function AdminForm() {
 
   return (
     <form
-      className="p-2 flex flex-col flex-1 h-screen bg-slate-400"
+      className="p-2 flex flex-col flex-1 h-screen bg-slate-400 pl-40"
       onSubmit={handleSubmit}
     >
       <label htmlFor="name">Nombre del producto</label>

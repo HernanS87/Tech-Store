@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   return (
-    <div className="bg-gray-700 text-white h-screen">
+    <div className="bg-gray-700 text-white h-screen fixed">
       <ul className="h-full flex flex-col w-36">
         <li className="px-2 my-2 text-center">
           <img src="" alt="" />
