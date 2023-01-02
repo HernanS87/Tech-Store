@@ -1,6 +1,6 @@
-import { uploadImage, db } from "../firebase/firebase";
+import { uploadImage, db } from "../constants";
 import { collection, addDoc } from "firebase/firestore";
-import { useAdminContext } from "../context/AdminContext";
+import { useAdminContext } from "../context";
 
 export default function AdminForm() {
   const stockRef = collection(db, "stock");

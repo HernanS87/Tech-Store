@@ -1,11 +1,6 @@
-import About from "./pages/About";
-import Home from "./pages/Home";
-import Header from "./components/Header";
-import Admin from "./pages/Admin";
-import AdminForm from "./pages/AdminForm";
+import { About, Home, Admin, AdminForm, AdminStock } from "./pages";
 import { Routes, Route } from "react-router-dom";
-import AdminStock from "./pages/AdminStock";
-import Sidebar from "./components/admin/Sidebar";
+import {Header, Sidebar} from "./components/";
 
 function App() {
   return (

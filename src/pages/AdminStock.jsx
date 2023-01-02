@@ -1,8 +1,8 @@
-import { db } from "../firebase/firebase";
+import { db } from "../constants";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import Stock from "../components/admin/Stock";
-import { useAdminContext } from "../context/AdminContext";
+import { Stock } from "../components";
+import { useAdminContext } from "../context";
 
 export default function AdminStock() {
   const [stock, setStock] = useState([]);
@@ -30,10 +30,17 @@ export default function AdminStock() {
       {categories.sort().map((cat, index) => {
         let arrayTemp = stock.filter((el) => el.category === cat);
         return (
-          <div key={index} className="category-container pb-6 border-b-2 border-gray-300">
-            <h2 className="title px-6 mt-4 mb-6 text-2xl font-semibold">{cat}</h2>
+          <div
+            key={index}
+            className="category-container pb-6 border-b-2 border-gray-300"
+          >
+            <h2 className="title px-6 mt-4 mb-6 text-2xl font-semibold">
+              {cat}
+            </h2>
             {arrayTemp.length === 0 ? (
-              <h2 className=" text-center font-semibold uppercase text-gray-600 opacity-50">No tiene productos 😔</h2>
+              <h2 className=" text-center font-semibold uppercase text-gray-600 opacity-50">
+                No tiene productos 😔
+              </h2>
             ) : (
               <div>
                 {arrayTemp.map((prod) => (
