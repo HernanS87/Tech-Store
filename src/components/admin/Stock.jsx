@@ -1,9 +1,8 @@
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 
 export default function Stock({prod}) {
-  console.log(prod)
   return (
-    <div className="card bg-white flex justify-between flex-1 w-3/4 m-auto rounded mt-4 py-2 px-4 ">
+    <div className="card bg-white flex justify-between flex-1 w-3/4 m-auto py-2 px-4 border-b first:rounded-t last:rounded-b  ">
 
       <div className="min-w-fit flex flex-col justify-center">
         <img
