@@ -1,21 +1,25 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
 const AdminContext = createContext();
 
-const categories = [
-  "Electrónica, audio y video",
-  "Computación",
-  "Celulares",
-  "Laptops",
-  "Sillas para pc",
-  "Camaras y accesorios",
-];
-
 export const AdminContextProvider = ({ children }) => {
+  const categories = [
+    "Electrónica, audio y video",
+    "Computación",
+    "Celulares",
+    "Laptops",
+    "Sillas para pc",
+    "Camaras y accesorios",
+  ];
+
+  const [prodToEdit, setProdToEdit] = useState(null);
+
   return (
     <AdminContext.Provider
       value={{
         categories,
+        prodToEdit,
+        setProdToEdit,
       }}
     >
       {children}
