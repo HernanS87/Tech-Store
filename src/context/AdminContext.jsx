@@ -1,4 +1,7 @@
 import { createContext, useContext, useState } from "react";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../constants";
+import { v4 } from "uuid";
 
 const AdminContext = createContext();
 
@@ -12,14 +15,23 @@ export const AdminContextProvider = ({ children }) => {
     "Camaras y accesorios",
   ];
 
-  const [prodToEdit, setProdToEdit] = useState(null);
+  async function uploadImage(image) {
+    const storageRef = ref(storage, `testing/${v4()}`);
+    await uploadBytes(storageRef, image);
+    return getDownloadURL(storageRef);
+  }
 
+  const [prodToEdit, setProdToEdit] = useState(null);
+  const [imgArray, setImgArray] = useState([]);
   return (
     <AdminContext.Provider
       value={{
         categories,
         prodToEdit,
         setProdToEdit,
+        uploadImage,
+        imgArray,
+        setImgArray,
       }}
     >
       {children}

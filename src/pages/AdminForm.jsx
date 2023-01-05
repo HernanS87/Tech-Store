@@ -1,13 +1,13 @@
-import { uploadImage, db } from "../constants";
+import { db } from "../constants";
 import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 import { useAdminContext } from "../context";
+import { InputFileCustom } from "../components";
 
 export default function AdminForm() {
-  const { categories, prodToEdit, setProdToEdit } = useAdminContext();
+  const { categories, prodToEdit, setProdToEdit, imgArray, setImgArray } = useAdminContext();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const image = await uploadImage(e.target.image.files[0]);
     if (prodToEdit) {
       const prodRef = doc(db, `stock/${prodToEdit.id}`);
       updateDoc(prodRef, {
@@ -16,6 +16,7 @@ export default function AdminForm() {
         category: e.target.category.value,
         description: e.target.description.value,
         price: e.target.price.value,
+        img: imgArray,
       });
       setProdToEdit(null);
     } else {
@@ -25,26 +26,27 @@ export default function AdminForm() {
         category: e.target.category.value,
         description: e.target.description.value,
         price: e.target.price.value,
-        img: image,
+        img: imgArray,
       });
     }
 
     e.target.name.value = "";
     e.target.price.value = "";
     e.target.description.value = "";
-    e.target.image.value = null;
     e.target.category.value = "";
+    setImgArray([]);
   };
 
   return (
     <form
-      className="p-2 flex flex-col flex-1 h-screen bg-slate-400 pl-40"
+      className="p-2 flex flex-col flex-1 min-h-screen bg-slate-400 pl-40"
       onSubmit={handleSubmit}
     >
       <label htmlFor="name">Nombre del producto</label>
       <input
         type="text"
         id="name"
+        required
         placeholder="Producto"
         className="border-2 my-2 "
         defaultValue={prodToEdit ? prodToEdit.name : ""}
@@ -52,6 +54,7 @@ export default function AdminForm() {
       <label htmlFor="category">Selecciona una categoría</label>
       <select
         id="category"
+        required
         aria-placeholder="Categoría"
         className="border-2 my-2"
         defaultValue={prodToEdit ? prodToEdit.category : ""}
@@ -67,6 +70,7 @@ export default function AdminForm() {
       <input
         type="number"
         id="price"
+        required
         placeholder="$ARS"
         className="border-2 my-2"
         defaultValue={prodToEdit ? prodToEdit.price : ""}
@@ -80,8 +84,7 @@ export default function AdminForm() {
         className="border-2 my-2"
         defaultValue={prodToEdit ? prodToEdit.description : ""}
       ></textarea>
-      <label htmlFor="image">Imagen</label>
-      <input type="file" className="my-2" id="image" />
+      <InputFileCustom />
       <button
         type="submit"
         className="w-fit my-2 px-2 py-1 text-white bg-blue-600"
