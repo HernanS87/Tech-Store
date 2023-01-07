@@ -1,15 +1,16 @@
 import { db } from "../constants";
-import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, setDoc } from "firebase/firestore";
 import { useAdminContext } from "../context";
 import { InputFileCustom } from "../components";
 
 export default function AdminForm() {
-  const { categories, prodToEdit, setProdToEdit, imgArray, setImgArray } = useAdminContext();
+  const { categories, prodToEdit, setProdToEdit, imgArray, setImgArray } =
+    useAdminContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (prodToEdit) {
-      const prodRef = doc(db, `stock/${prodToEdit.id}`);
+      const prodRef = doc(db, `Stock/${prodToEdit.id}`);
       updateDoc(prodRef, {
         ...prodToEdit,
         name: e.target.name.value,
@@ -20,8 +21,8 @@ export default function AdminForm() {
       });
       setProdToEdit(null);
     } else {
-      const stockRef = collection(db, "stock");
-      addDoc(stockRef, {
+      const stockRef = doc(db, "Stock", `${e.target.name.value}`);
+      setDoc(stockRef, {
         name: e.target.name.value,
         category: e.target.category.value,
         description: e.target.description.value,

@@ -21,7 +21,7 @@ export default function Stock({ prod }) {
     );
     if (answer) {
       console.log("Se eliminó", prod.name);
-      deleteDoc(doc(db, "stock", prod.id));
+      deleteDoc(doc(db, "Stock", prod.id));
     }
   };
 

@@ -6,7 +6,7 @@ import { useAdminContext } from "../context";
 
 export default function AdminStock() {
   const [stock, setStock] = useState([]);
-  const ref = collection(db, "stock");
+  const ref = collection(db, "Stock");
   const { categories } = useAdminContext();
 
   const getProd = () => {
