@@ -20,13 +20,15 @@ export const AdminContextProvider = ({ children }) => {
     await uploadBytes(storageRef, image);
     return getDownloadURL(storageRef);
   }
-
+  const [quantity, setQuantity] = useState(1);
   const [prodToEdit, setProdToEdit] = useState(null);
   const [imgArray, setImgArray] = useState([]);
   return (
     <AdminContext.Provider
       value={{
         categories,
+        quantity,
+        setQuantity,
         prodToEdit,
         setProdToEdit,
         uploadImage,

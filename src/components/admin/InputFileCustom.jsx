@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useAdminContext } from "../../context";
 
-
 export default function InputFileCustom() {
   const { uploadImage, imgArray, setImgArray } = useAdminContext();
 
@@ -47,11 +46,11 @@ export default function InputFileCustom() {
         onDragLeave={() => setDrag(false)}
       >
         <div
-          className={
+          className={`p-2 text-center border-2 border-dashed min-h-100px flex items-center justify-center ${
             !drag
-              ? "p-2 bg-white text-center border-2 border-dashed text-gray-400 border-gray-500 min-h-100px flex items-center justify-center"
-              : "p-2 bg-gray-300 text-center border-2 border-dashed text-white border-white min-h-100px flex items-center justify-center transition-all "
-          }
+              ? " bg-white   text-gray-400 border-gray-500 "
+              : "bg-gray-300 text-white border-white transition-all "
+          }`}
         >
           {imgArray.length === 0 ? (
             "Puedes arrastrar tus imágenes si lo prefieres"

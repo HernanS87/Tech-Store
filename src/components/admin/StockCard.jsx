@@ -5,13 +5,14 @@ import { db } from "../../constants";
 import { deleteDoc, doc } from "firebase/firestore";
 
 export default function Stock({ prod }) {
-  const { setProdToEdit, setImgArray } = useAdminContext();
+  const { setProdToEdit, setImgArray, setQuantity } = useAdminContext();
   const navigate = useNavigate();
 
   const handleEdit = () => {
     console.log(prod);
     setProdToEdit(prod);
     setImgArray(prod.img);
+    setQuantity(prod.quantity);
     navigate("/admin/form");
   };
 
@@ -44,7 +45,7 @@ export default function Stock({ prod }) {
             </div>
 
             <div className="flex flex-grow flex-col">
-              <span>5 unidades</span>
+              <span>{prod.quantity} unidades</span>
               <div className="flex flex-wrap ">
                 {prod.img.map((url, index) => (
                   <img

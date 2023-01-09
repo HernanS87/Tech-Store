@@ -1,11 +1,18 @@
 import { db } from "../constants";
 import { doc, updateDoc, setDoc } from "firebase/firestore";
 import { useAdminContext } from "../context";
-import { InputFileCustom } from "../components";
+import { InputFileCustom, InputQuantityCustom } from "../components";
 
 export default function AdminForm() {
-  const { categories, prodToEdit, setProdToEdit, imgArray, setImgArray } =
-    useAdminContext();
+  const {
+    categories,
+    quantity,
+    setQuantity,
+    prodToEdit,
+    setProdToEdit,
+    imgArray,
+    setImgArray,
+  } = useAdminContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,6 +24,7 @@ export default function AdminForm() {
         category: e.target.category.value,
         description: e.target.description.value,
         price: e.target.price.value,
+        quantity: quantity,
         img: imgArray,
       });
       setProdToEdit(null);
@@ -27,6 +35,7 @@ export default function AdminForm() {
         category: e.target.category.value,
         description: e.target.description.value,
         price: e.target.price.value,
+        quantity: quantity,
         img: imgArray,
       });
     }
@@ -36,6 +45,7 @@ export default function AdminForm() {
     e.target.description.value = "";
     e.target.category.value = "";
     setImgArray([]);
+    setQuantity(1);
   };
 
   return (
@@ -85,6 +95,7 @@ export default function AdminForm() {
         className="border-2 my-2"
         defaultValue={prodToEdit ? prodToEdit.description : ""}
       ></textarea>
+      <InputQuantityCustom />
       <InputFileCustom />
       <button
         type="submit"
