@@ -20,6 +20,7 @@ export const AdminContextProvider = ({ children }) => {
     await uploadBytes(storageRef, image);
     return getDownloadURL(storageRef);
   }
+  const [priceOk, setPriceOk] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [prodToEdit, setProdToEdit] = useState(null);
   const [imgArray, setImgArray] = useState([]);
@@ -27,6 +28,8 @@ export const AdminContextProvider = ({ children }) => {
     <AdminContext.Provider
       value={{
         categories,
+        priceOk,
+        setPriceOk,
         quantity,
         setQuantity,
         prodToEdit,

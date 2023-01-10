@@ -1,11 +1,16 @@
 import { db } from "../constants";
 import { doc, updateDoc, setDoc } from "firebase/firestore";
 import { useAdminContext } from "../context";
-import { InputFileCustom, InputQuantityCustom } from "../components";
+import {
+  InputPriceCustom,
+  InputFileCustom,
+  InputQuantityCustom,
+} from "../components";
 
 export default function AdminForm() {
   const {
     categories,
+    setPriceOk,
     quantity,
     setQuantity,
     prodToEdit,
@@ -20,10 +25,10 @@ export default function AdminForm() {
       const prodRef = doc(db, `Stock/${prodToEdit.id}`);
       updateDoc(prodRef, {
         ...prodToEdit,
-        name: e.target.name.value,
+        name: e.target.name.value.trim(),
         category: e.target.category.value,
-        description: e.target.description.value,
-        price: e.target.price.value,
+        description: e.target.description.value.trim(),
+        price: e.target.price.value.trim(),
         quantity: quantity,
         img: imgArray,
       });
@@ -31,10 +36,10 @@ export default function AdminForm() {
     } else {
       const stockRef = doc(db, "Stock", `${e.target.name.value}`);
       setDoc(stockRef, {
-        name: e.target.name.value,
+        name: e.target.name.value.trim(),
         category: e.target.category.value,
-        description: e.target.description.value,
-        price: e.target.price.value,
+        description: e.target.description.value.trim(),
+        price: e.target.price.value.trim(),
         quantity: quantity,
         img: imgArray,
       });
@@ -46,6 +51,7 @@ export default function AdminForm() {
     e.target.category.value = "";
     setImgArray([]);
     setQuantity(1);
+    setPriceOk(true);
   };
 
   return (
@@ -57,18 +63,18 @@ export default function AdminForm() {
       <input
         type="text"
         id="name"
-        required
         placeholder="Producto"
         className="border-2 my-2 "
         defaultValue={prodToEdit ? prodToEdit.name : ""}
+        required
       />
       <label htmlFor="category">Selecciona una categoría</label>
       <select
         id="category"
-        required
         aria-placeholder="Categoría"
         className="border-2 my-2"
         defaultValue={prodToEdit ? prodToEdit.category : ""}
+        required
       >
         <option value=""></option>
         {categories.sort().map((elem) => (
@@ -77,15 +83,13 @@ export default function AdminForm() {
           </option>
         ))}
       </select>
-      <label htmlFor="price">Precio</label>
-      <input
-        type="number"
-        id="price"
-        required
-        placeholder="$ARS"
-        className="border-2 my-2"
-        defaultValue={prodToEdit ? prodToEdit.price : ""}
-      />
+      <div className="flex justify-center my-2">
+        <div className="flex flex-wrap items-center justify-between w-full sm:w-3/4 md-920-w-66 lg:w-3/5 ">
+          <InputPriceCustom />
+          <InputQuantityCustom />
+        </div>
+      </div>
+
       <label htmlFor="description">Descripcion</label>
       <textarea
         name=""
@@ -95,7 +99,6 @@ export default function AdminForm() {
         className="border-2 my-2"
         defaultValue={prodToEdit ? prodToEdit.description : ""}
       ></textarea>
-      <InputQuantityCustom />
       <InputFileCustom />
       <button
         type="submit"

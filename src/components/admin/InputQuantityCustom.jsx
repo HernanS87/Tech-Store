@@ -1,18 +1,15 @@
 import { useAdminContext } from "../../context";
+import InputAlert from "./InputAlert";
 
 export default function InputQuantityCustom() {
   const { quantity, setQuantity } = useAdminContext();
   return (
-    <>
-      <div
-        className={`mt-2 flex items-center ${
-          quantity && quantity != 0 && "mb-4"
-        }`}
-      >
+    <div className="flex-col">
+      <div className={` flex items-center ${quantity && quantity != 0 && ""}`}>
         <label htmlFor="quantity" className="">
           Cantidad
         </label>
-        <div className="mx-4 border-2 border-slate-500 bg-white rounded">
+        <div className="ml-4 mr border-2 border-slate-500 bg-white rounded">
           <button
             type="button"
             id="decrease"
@@ -30,6 +27,7 @@ export default function InputQuantityCustom() {
             id="quantity"
             value={quantity}
             className="w-14 h-7 px-1 text-center outline-none"
+            required
             onChange={(e) => {
               if (e.target.value < 0) {
                 setQuantity(e.target.value * -1);
@@ -50,11 +48,7 @@ export default function InputQuantityCustom() {
           </button>
         </div>
       </div>
-      {(!quantity || quantity == 0) && (
-        <p className="text-xs font-medium text-red-600">
-          ¡Debes seleccionar una cantidad mayor o igual a 1!
-        </p>
-      )}
-    </>
+      <InputAlert state={quantity} />
+    </div>
   );
 }

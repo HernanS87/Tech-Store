@@ -1,7 +1,7 @@
 import { db } from "../constants";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Stock } from "../components";
+import { StockCard } from "../components";
 import { useAdminContext } from "../context";
 
 export default function AdminStock() {
@@ -44,7 +44,7 @@ export default function AdminStock() {
             ) : (
               <div>
                 {arrayTemp.map((prod) => (
-                  <Stock key={prod.id} prod={prod} />
+                  <StockCard key={prod.id} prod={prod} />
                 ))}
               </div>
             )}
