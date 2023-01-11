@@ -5,6 +5,7 @@ import {
   InputPriceCustom,
   InputFileCustom,
   InputQuantityCustom,
+  InputOfferCustom,
 } from "../components";
 
 export default function AdminForm() {
@@ -13,6 +14,8 @@ export default function AdminForm() {
     setPriceOk,
     quantity,
     setQuantity,
+    offer,
+    setOffer,
     prodToEdit,
     setProdToEdit,
     imgArray,
@@ -30,6 +33,8 @@ export default function AdminForm() {
         description: e.target.description.value.trim(),
         price: e.target.price.value.trim(),
         quantity: quantity,
+        offer: offer,
+        percent: e.target.percent.value,
         img: imgArray,
       });
       setProdToEdit(null);
@@ -41,6 +46,8 @@ export default function AdminForm() {
         description: e.target.description.value.trim(),
         price: e.target.price.value.trim(),
         quantity: quantity,
+        offer: { offer },
+        percent: e.target.percent.value,
         img: imgArray,
       });
     }
@@ -49,9 +56,11 @@ export default function AdminForm() {
     e.target.price.value = "";
     e.target.description.value = "";
     e.target.category.value = "";
+    e.target.percent.value = "";
     setImgArray([]);
     setQuantity(1);
     setPriceOk(true);
+    setOffer(false);
   };
 
   return (
@@ -84,10 +93,13 @@ export default function AdminForm() {
         ))}
       </select>
       <div className="flex justify-center my-2">
-        <div className="flex flex-wrap items-center justify-between w-full sm:w-3/4 md-920-w-66 lg:w-3/5 ">
+        <div className="flex flex-wrap items-center justify-between py-4 w-full sm:w-3/4 md-920-w-66 lg:w-3/5 ">
           <InputPriceCustom />
           <InputQuantityCustom />
         </div>
+      </div>
+      <div>
+        <InputOfferCustom />
       </div>
 
       <label htmlFor="description">Descripcion</label>
@@ -96,6 +108,7 @@ export default function AdminForm() {
         id="description"
         cols="30"
         rows="3"
+        placeholder="..."
         className="border-2 my-2"
         defaultValue={prodToEdit ? prodToEdit.description : ""}
       ></textarea>

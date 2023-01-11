@@ -22,6 +22,7 @@ export const AdminContextProvider = ({ children }) => {
   }
   const [priceOk, setPriceOk] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [offer, setOffer] = useState(false);
   const [prodToEdit, setProdToEdit] = useState(null);
   const [imgArray, setImgArray] = useState([]);
   return (
@@ -32,6 +33,8 @@ export const AdminContextProvider = ({ children }) => {
         setPriceOk,
         quantity,
         setQuantity,
+        offer,
+        setOffer,
         prodToEdit,
         setProdToEdit,
         uploadImage,

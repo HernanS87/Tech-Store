@@ -12,7 +12,7 @@ export default function InputPriceCustom() {
           type="number"
           id="price"
           placeholder="$ARS"
-          className="border-2 my-2 ml-4 w-24 h-8 px-1 text-center outline-none border-slate-500 rounded"
+          className="border-2  ml-4 w-24 h-8 px-1 text-center outline-none border-slate-500 rounded"
           defaultValue={prodToEdit ? prodToEdit.price : ""}
           required
           onChange={(e) => {

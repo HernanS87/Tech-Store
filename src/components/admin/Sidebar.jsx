@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAdminContext } from "../../context";
 
 export default function Sidebar() {
-  const { setProdToEdit, setImgArray, setQuantity, setPriceOk } =
+  const { setProdToEdit, setImgArray, setQuantity, setPriceOk, setOffer } =
     useAdminContext();
   return (
     <div className="bg-gray-700 text-white h-screen fixed">
@@ -18,6 +18,7 @@ export default function Sidebar() {
               setImgArray([]);
               setQuantity(1);
               setPriceOk(true);
+              setOffer(false);
             }}
           >
             Productos
