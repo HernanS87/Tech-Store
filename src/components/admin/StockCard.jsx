@@ -5,7 +5,8 @@ import { db } from "../../constants";
 import { deleteDoc, doc } from "firebase/firestore";
 
 export default function Stock({ prod }) {
-  const { setProdToEdit, setImgArray, setQuantity } = useAdminContext();
+  const { setProdToEdit, setImgArray, setQuantity, setOffer } =
+    useAdminContext();
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -13,6 +14,7 @@ export default function Stock({ prod }) {
     setProdToEdit(prod);
     setImgArray(prod.img);
     setQuantity(prod.quantity);
+    setOffer(prod.offer);
     navigate("/admin/form");
   };
 
@@ -38,10 +40,31 @@ export default function Stock({ prod }) {
         <div>
           <h2 className="font-medium text-xl capitalize">{prod.name}</h2>
         </div>
-        <div className="flex flex-col flex-grow  justify-center">
+        <div className="flex flex-col flex-grow pt-3">
           <div className="flex justify-between flex-wrap">
             <div className="flex flex-grow">
-              <span className="font-semibold ">${prod.price}</span>
+              {!prod.offer ? (
+                <span className="font-semibold ">
+                  $ {new Intl.NumberFormat("es-AR").format(prod.price)}
+                </span>
+              ) : (
+                <div>
+                  <p className="text-xs text-gray-600 line-through">
+                    $ {new Intl.NumberFormat("es-AR").format(prod.price)}
+                  </p>
+                  <div className="flex items-center">
+                    <p className="font-semibold">
+                      ${" "}
+                      {new Intl.NumberFormat("es-AR").format(
+                        Math.floor(prod.price * (1 - prod.percent / 100))
+                      )}
+                    </p>
+                    <span className="text-xs font-medium text-green-500 ml-2">
+                      {prod.percent}% OFF
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-grow flex-col">

@@ -3,7 +3,7 @@ import { useAdminContext } from "../../context";
 import InputAlert from "./InputAlert";
 
 export default function InputOfferCustom() {
-  const { offer, setOffer } = useAdminContext();
+  const { offer, setOffer, prodToEdit } = useAdminContext();
   const [percentOk, setPercentOk] = useState(true);
 
   return (
@@ -15,7 +15,8 @@ export default function InputOfferCustom() {
             type="radio"
             name="offer"
             id="yes"
-            onClick={() => setOffer(true)}
+            checked={offer ? true : false}
+            onChange={() => setOffer(true)}
           />
           <label htmlFor="yes">Si</label>
           <input
@@ -23,6 +24,7 @@ export default function InputOfferCustom() {
             id="percent"
             min={1}
             max={100}
+            defaultValue={prodToEdit ? prodToEdit.percent : ""}
             placeholder="10%"
             disabled={!offer}
             className="border-2 ml-4 mt-2px w-12 py-2px px-1 text-center outline-none border-slate-500 rounded"
@@ -55,8 +57,8 @@ export default function InputOfferCustom() {
             type="radio"
             name="offer"
             id="no"
-            defaultChecked
-            onClick={(e) => {
+            checked={!offer ? true : false}
+            onChange={(e) => {
               e.target.form.percent.value = "";
               setOffer(false);
               setPercentOk(true);
