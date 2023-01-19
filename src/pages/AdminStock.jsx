@@ -1,13 +1,13 @@
 import { db } from "../constants";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { StockCard } from "../components";
+import { StockCard, DetailPopup } from "../components";
 import { useAdminContext } from "../context";
 
 export default function AdminStock() {
   const [stock, setStock] = useState([]);
   const ref = collection(db, "Stock");
-  const { categories } = useAdminContext();
+  const { categories, detailPopup } = useAdminContext();
 
   const getProd = () => {
     onSnapshot(ref, (querySnapshot) => {
@@ -51,6 +51,7 @@ export default function AdminStock() {
           </div>
         );
       })}
+      {detailPopup.ok && <DetailPopup/>}
     </div>
   );
 }

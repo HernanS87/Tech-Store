@@ -6,6 +6,12 @@
     .min-h-100px{
         min-height: 100px;
     }
+    .min-h-288px{
+      min-height: 288px;
+    }
+    .min-w-224px{
+      min-width: 224px;
+    }
     .font-size-50px{
         font-size: 50px;
         
@@ -18,6 +24,10 @@
     }
     .mt-2px{
       margin-top: 2px ;
+    }
+    .btn-pos {
+      position: absolute;
+      top: calc(50% - (27.997px/2))
     }
     @media (min-width: 920px) {
       .md-920-w-66 {

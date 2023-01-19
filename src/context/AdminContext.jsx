@@ -25,6 +25,10 @@ export const AdminContextProvider = ({ children }) => {
   const [offer, setOffer] = useState(false);
   const [prodToEdit, setProdToEdit] = useState(null);
   const [imgArray, setImgArray] = useState([]);
+  const [detailPopup, setDetailPopup] = useState({
+    ok: false
+  });
+  
   return (
     <AdminContext.Provider
       value={{
@@ -40,6 +44,8 @@ export const AdminContextProvider = ({ children }) => {
         uploadImage,
         imgArray,
         setImgArray,
+        detailPopup,
+        setDetailPopup,
       }}
     >
       {children}

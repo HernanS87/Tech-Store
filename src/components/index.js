@@ -1,4 +1,5 @@
 export { default as Header } from "./Header";
+export { default as DetailPopup } from "./admin/DetailPopup";
 export { default as InputAlert } from "./admin/InputAlert";
 export { default as InputFileCustom } from "./admin/InputFileCustom";
 export { default as InputOfferCustom } from "./admin/InputOfferCustom";
