@@ -2,10 +2,10 @@ import { useAdminContext } from "../../context";
 import InputAlert from "./InputAlert";
 
 export default function InputQuantityCustom() {
-  const { quantity, setQuantity } = useAdminContext();
+  const { form, setForm, handleChange, error } = useAdminContext();
   return (
     <div className="flex-col">
-      <div className={` flex items-center ${quantity && quantity != 0 && ""}`}>
+      <div className="flex items-center">
         <label htmlFor="quantity" className="">
           Cantidad
         </label>
@@ -15,25 +15,27 @@ export default function InputQuantityCustom() {
             id="decrease"
             className="pl-1 text-blue-500 font-semibold"
             onClick={() => {
-              if (quantity > 1) setQuantity(parseInt(quantity) - 1);
+              if (form.quantity > 1)
+                setForm({
+                  ...form,
+                  quantity: parseInt(form.quantity) - 1,
+                });
             }}
           >
             -
           </button>
           <input
             type="number"
-            min={1}
-            pattern="[0-9]+"
             id="quantity"
-            value={quantity}
+            name="quantity"
+            value={form.quantity}
             className="w-14 h-7 px-1 text-center outline-none"
-            required
             onChange={(e) => {
-              if (e.target.value < 0) {
-                setQuantity(e.target.value * -1);
-              } else {
-                setQuantity(e.target.value);
+              let { value } = e.target;
+              if (value < 0 && value != "") {
+                e.target.value = parseInt(value) * -1;
               }
+              handleChange(e);
             }}
           />
           <button
@@ -41,14 +43,18 @@ export default function InputQuantityCustom() {
             id="increase"
             className="pr-2px text-blue-500 font-semibold "
             onClick={() => {
-              if (quantity) setQuantity(parseInt(quantity) + 1);
+              if (form.quantity > 0)
+                setForm({
+                  ...form,
+                  quantity: parseInt(form.quantity) + 1,
+                });
             }}
           >
             +
           </button>
         </div>
       </div>
-      <InputAlert state={quantity} />
+      <InputAlert msg={error.quantity} />
     </div>
   );
 }

@@ -13,11 +13,14 @@ export default function InputFileCustom() {
       files.push(img);
     }
     files.forEach(async (el) => {
-      const imageURL = await uploadImage(el);
-      imagesTemp.push(imageURL);
-      setImgArray([...imagesTemp]);
+      if (el.type.includes("image")) {
+        const imageURL = await uploadImage(el);
+        imagesTemp.push(imageURL);
+        setImgArray([...imagesTemp]);
+      } else {
+        alert(`No puedes cargar "${el.name}" porque no es una imágen`);
+      }
     });
-    console.log(imagesTemp);
   };
 
   const handleDelete = (urlToDelete) => {
@@ -30,6 +33,18 @@ export default function InputFileCustom() {
         Selecciona las imágenes de tu producto{" "}
         <span className="cursor-pointer text-blue-600">aquí</span>
       </label>
+      <input
+        type="file"
+        className="hidden"
+        id="images"
+        name="images"
+        multiple
+        accept="image/*"
+        onChange={(e) => {
+          uploadFiles(e.target.files);
+          e.target.value = null;
+        }}
+      />
       <div
         id="dropZone"
         className="p-2 bg-slate-500 w-3/4 m-auto mt-2 "
@@ -85,15 +100,6 @@ export default function InputFileCustom() {
             </div>
           )}
         </div>
-
-        <input
-          type="file"
-          className="hidden"
-          id="images"
-          multiple
-          accept="image/*"
-          onChange={async (e) => uploadFiles(e.target.files)}
-        />
       </div>
     </div>
   );
