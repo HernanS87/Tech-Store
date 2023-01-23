@@ -61,7 +61,11 @@ export default function Carousel(props) {
   };
   return (
     <div className="flex justify-center relative">
-      {props.images.length > 1 && <span className="bg-gray-100 font-medium text-sm rounded-r-full rounded-l-full px-2 absolute left-0 z-10">{`${selectedIndex + 1 } / ${props.images.length}` }</span>}
+      {props.images.length > 1 && (
+        <span className="bg-gray-100 font-medium text-sm rounded-r-full rounded-l-full px-2 absolute left-0 z-10">{`${
+          selectedIndex + 1
+        } / ${props.images.length}`}</span>
+      )}
       {props.images.length > 1 ? (
         <div
           className="flex-col relative"

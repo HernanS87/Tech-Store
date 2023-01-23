@@ -16,7 +16,7 @@ function UserPopup() {
           e.stopPropagation();
         }}
       >
-        <Carousel images={detailPopup.img} />
+        <Carousel images={detailPopup.images} />
         <div className="ml-2 pt-2 flex items-center max-w-xs">
           <div className="pl-2">
             <h1 className="mb-2 font-medium text-xl capitalize">

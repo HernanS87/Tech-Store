@@ -5,16 +5,12 @@ import { db } from "../../constants";
 import { deleteDoc, doc } from "firebase/firestore";
 
 export default function Stock({ prod }) {
-  const { setProdToEdit, setImgArray, setQuantity, setOffer, setDetailPopup } =
-    useAdminContext();
+  const { setDetailPopup, setForm } = useAdminContext();
   const navigate = useNavigate();
 
   const handleEdit = () => {
     console.log(prod);
-    setProdToEdit(prod);
-    setImgArray(prod.img);
-    setQuantity(prod.quantity);
-    setOffer(prod.offer);
+    setForm(prod);
     navigate("/admin/form");
   };
 
@@ -31,7 +27,11 @@ export default function Stock({ prod }) {
   return (
     <div className="card bg-white flex justify-between flex-1 w-3/4 m-auto py-2 px-4 border-b first:rounded-t last:rounded-b  ">
       <div className="min-w-fit flex flex-col justify-center">
-        <img src={prod.img[0]} alt="" className="w-36 h-36 object-contain " />
+        <img
+          src={prod.images[0]}
+          alt=""
+          className="w-36 h-36 object-contain "
+        />
       </div>
 
       <div className="flex flex-col flex-grow justify-between pl-3 pr-2 alin">
@@ -80,7 +80,7 @@ export default function Stock({ prod }) {
                 {prod.quantity > 1 ? `${prod.quantity} unidades` : "1 unidad"}
               </span>
               <div className="flex flex-wrap ">
-                {prod.img.map((url, index) => (
+                {prod.images.map((url, index) => (
                   <img
                     key={index}
                     src={url}

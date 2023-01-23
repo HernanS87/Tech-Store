@@ -1,3 +1,5 @@
+import { db } from "../constants";
+import { doc, updateDoc, setDoc } from "firebase/firestore";
 import { createContext, useContext, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../constants";
@@ -39,7 +41,7 @@ export const AdminContextProvider = ({ children }) => {
     let errors = {};
     let regexName = /^.{4,200}$/;
     let regexPrice = /^[1-9]\d*$/;
-    let regexComments = /^.{1,255}$/;
+    let regexComments = /^.{0,255}$/;
 
     if (!form.name.trim()) {
       errors.name = 'El campo "Nombre" es requerido';
@@ -75,6 +77,16 @@ export const AdminContextProvider = ({ children }) => {
       validate = false;
     }
 
+    if (form.offer && (form.percent > 100 || form.percent < 1)) {
+      errors.percent = "Debes colocar un numero entero entre 1 y 100";
+      validate = false;
+    }
+
+    if (form.images.length === 0) {
+      errors.images = "Debes cargar al menos una imágen del producto";
+      validate = false;
+    }
+
     return validate ? null : errors;
   };
 
@@ -87,10 +99,12 @@ export const AdminContextProvider = ({ children }) => {
       [name]: value,
     });
   };
-  const handleBlur = (e) => {
-    handleChange(e);
-    setError(validationsForm(form));
+
+  const resetForm = () => {
+    setForm(initialState);
+    setError({});
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const err = validationsForm(form);
@@ -98,21 +112,27 @@ export const AdminContextProvider = ({ children }) => {
     if (err === null) {
       console.log("enviado exitosamente");
       console.log(form);
-      // setForm(initialState)
-      setError({});
+      if (form.id) {
+        const prodRef = doc(db, `Stock/${form.id}`);
+        updateDoc(prodRef, {
+          ...form,
+        });
+      } else {
+        const stockRef = doc(db, "Stock", `${e.target.name.value}`);
+        setDoc(stockRef, {
+          ...form,
+        });
+      }
+
+      resetForm();
     } else {
       setError(err);
     }
   };
 
-  // const [priceOk, setPriceOk] = useState(true);
-  // const [quantity, setQuantity] = useState(1);
-  // const [offer, setOffer] = useState(false);
-  // const [prodToEdit, setProdToEdit] = useState(null);
-  // const [imgArray, setImgArray] = useState([]);
-  // const [detailPopup, setDetailPopup] = useState({
-  //   ok: false
-  // });
+  const [detailPopup, setDetailPopup] = useState({
+    ok: false,
+  });
 
   return (
     <AdminContext.Provider
@@ -120,24 +140,14 @@ export const AdminContextProvider = ({ children }) => {
         categories,
         form,
         error,
-        validationsForm,
         handleChange,
-        handleBlur,
         handleSubmit,
         setForm,
-        // priceOk,
-        // setPriceOk,
-        // quantity,
-        // setQuantity,
-        // offer,
-        // setOffer,
-        // prodToEdit,
-        // setProdToEdit,
-        // uploadImage,
-        // imgArray,
-        // setImgArray,
-        // detailPopup,
-        // setDetailPopup,
+        setError,
+        resetForm,
+        uploadImage,
+        detailPopup,
+        setDetailPopup,
       }}
     >
       {children}

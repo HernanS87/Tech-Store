@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import { useAdminContext } from "../../context";
 
 export default function Sidebar() {
-  const { setProdToEdit, setImgArray, setQuantity, setPriceOk, setOffer } =
-    useAdminContext();
+  const { resetForm } = useAdminContext();
   return (
     <div className="bg-gray-700 text-white h-screen fixed">
       <ul className="h-full flex flex-col w-36">
@@ -14,11 +13,7 @@ export default function Sidebar() {
           <Link
             to="/admin/stock"
             onClick={() => {
-              setProdToEdit(null);
-              setImgArray([]);
-              setQuantity(1);
-              setPriceOk(true);
-              setOffer(false);
+              resetForm();
             }}
           >
             Productos

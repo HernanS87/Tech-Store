@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useAdminContext } from "../../context";
+import InputAlert from "./InputAlert";
 
 export default function InputFileCustom() {
-  const { uploadImage, imgArray, setImgArray } = useAdminContext();
+  const { uploadImage, form, setForm, error} = useAdminContext();
 
   const [drag, setDrag] = useState(false);
-  let imagesTemp = imgArray;
+  let imagesTemp = form.images;
 
   const uploadFiles = (dataFiles) => {
     let files = [];
@@ -16,7 +17,10 @@ export default function InputFileCustom() {
       if (el.type.includes("image")) {
         const imageURL = await uploadImage(el);
         imagesTemp.push(imageURL);
-        setImgArray([...imagesTemp]);
+        setForm({
+          ...form,
+          images: [...imagesTemp],
+        });
       } else {
         alert(`No puedes cargar "${el.name}" porque no es una imágen`);
       }
@@ -24,7 +28,10 @@ export default function InputFileCustom() {
   };
 
   const handleDelete = (urlToDelete) => {
-    setImgArray(imgArray.filter((url) => url !== urlToDelete));
+    setForm({
+      ...form,
+      images: form.images.filter((url) => url !== urlToDelete),
+    });
   };
 
   return (
@@ -67,16 +74,16 @@ export default function InputFileCustom() {
               : "bg-gray-300 text-white border-white transition-all "
           }`}
         >
-          {imgArray.length === 0 ? (
+          {form.images.length === 0 ? (
             "Puedes arrastrar tus imágenes si lo prefieres"
           ) : (
             <div className="relative w-full">
               <ul className="flex flex-wrap w-full justify-evenly items-center">
-                {imgArray.map((url, ind) => (
+                {form.images.map((url, ind) => (
                   <li key={ind} className="relative bg-slate-100">
                     <img
                       src={url}
-                      alt=""
+                      alt={form.name}
                       className="w-36 h-36 object-contain"
                     />
                     <button
@@ -101,6 +108,7 @@ export default function InputFileCustom() {
           )}
         </div>
       </div>
+      <InputAlert msg={error.images} />
     </div>
   );
 }

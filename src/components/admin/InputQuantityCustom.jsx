@@ -9,7 +9,7 @@ export default function InputQuantityCustom() {
         <label htmlFor="quantity" className="">
           Cantidad
         </label>
-        <div className="ml-4 mr border-2 border-slate-500 bg-white rounded">
+        <div className="ml-4 border-2 border-slate-500 bg-white rounded">
           <button
             type="button"
             id="decrease"

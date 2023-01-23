@@ -51,7 +51,7 @@ export default function AdminStock() {
           </div>
         );
       })}
-      {detailPopup.ok && <DetailPopup/>}
+      {detailPopup.ok && <DetailPopup />}
     </div>
   );
 }

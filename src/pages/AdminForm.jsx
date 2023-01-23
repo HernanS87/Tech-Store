@@ -1,5 +1,3 @@
-import { db } from "../constants";
-import { doc, updateDoc, setDoc } from "firebase/firestore";
 import { useAdminContext } from "../context";
 import {
   InputPriceCustom,
@@ -10,68 +8,8 @@ import {
 } from "../components";
 
 export default function AdminForm() {
-  const {
-    categories,
-    form,
-    error,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    // setPriceOk,
-    // quantity,
-    // setQuantity,
-    // offer,
-    // setOffer,
-    // prodToEdit,
-    // setProdToEdit,
-    // imgArray,
-    // setImgArray,
-  } = useAdminContext();
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (imgArray.length > 0) {
-  //     if (prodToEdit) {
-  //       const prodRef = doc(db, `Stock/${prodToEdit.id}`);
-  //       updateDoc(prodRef, {
-  //         ...prodToEdit,
-  //         name: e.target.name.value.trim(),
-  //         category: e.target.category.value,
-  //         description: e.target.description.value.trim(),
-  //         price: e.target.price.value,
-  //         quantity: quantity,
-  //         offer: offer,
-  //         percent: e.target.percent.value,
-  //         img: imgArray,
-  //       });
-  //       setProdToEdit(null);
-  //     } else {
-  //       const stockRef = doc(db, "Stock", `${e.target.name.value}`);
-  //       setDoc(stockRef, {
-  //         name: e.target.name.value.trim(),
-  //         category: e.target.category.value,
-  //         description: e.target.description.value.trim(),
-  //         price: e.target.price.value,
-  //         quantity: quantity,
-  //         offer: offer,
-  //         percent: e.target.percent.value,
-  //         img: imgArray,
-  //       });
-  //     }
-
-  //     e.target.name.value = "";
-  //     e.target.price.value = "";
-  //     e.target.description.value = "";
-  //     e.target.category.value = "";
-  //     e.target.percent.value = "";
-  //     setImgArray([]);
-  //     setQuantity(1);
-  //     setPriceOk(true);
-  //     setOffer(false);
-  //   } else {
-  //     alert("Debes cargar al menos una imágen");
-  //   }
-  // };
+  const { categories, form, error, handleChange, handleSubmit } =
+    useAdminContext();
 
   return (
     <form
@@ -113,7 +51,9 @@ export default function AdminForm() {
           <InputQuantityCustom />
         </div>
       </div>
-      <div>{/* <InputOfferCustom /> */}</div>
+      <div>
+        <InputOfferCustom />
+      </div>
       <label htmlFor="description">Descripción</label>
       <textarea
         id="description"
@@ -127,13 +67,12 @@ export default function AdminForm() {
       ></textarea>
       <InputAlert msg={error.description} />
 
-      {/* <InputFileCustom /> */}
+      <InputFileCustom />
       <button
         type="submit"
         className="w-fit my-2 px-2 py-1 text-white bg-blue-600"
       >
-        Guardar
-        {/* {prodToEdit ? "Editar" : "Guardar"} */}
+        {form.id ? "Editar" : "Guardar"}
       </button>
     </form>
   );
