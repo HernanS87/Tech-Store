@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAdminContext } from "../../context";
 import { db } from "../../constants";
 import { deleteDoc, doc } from "firebase/firestore";
+import { toast, Toaster } from "react-hot-toast";
 
 export default function Stock({ prod }) {
   const { setDetailPopup, setForm } = useAdminContext();
@@ -18,8 +19,30 @@ export default function Stock({ prod }) {
     let answer = confirm(
       `¿Estas seguro que quieres eliminar ${prod.name} de tu stock?`
     );
+    // let answer = false;
+    // toast.custom(
+    //   <div className="bg-white">
+    //     ¿Estas seguro que quieres eliminar ${prod.name} de tu stock?
+    //     <button
+    //       onClick={() => {
+    //         answer = true;
+    //         toast.dismiss()
+    //       }}
+    //     >
+    //       Aceptar
+    //     </button>
+    //     <button onClick={() => {
+    //       toast.dismiss()
+    //     }}>Cancelar</button>
+    //   </div>
+    // );
     if (answer) {
       console.log("Se eliminó", prod.name);
+      toast.error(`Eliminaste "${prod.name}" de tu stock`, {
+        duration: 3000,
+        position: "top-center",
+        className: "bg-red-400 text-white ",
+      });
       deleteDoc(doc(db, "Stock", prod.id));
     }
   };
@@ -106,6 +129,7 @@ export default function Stock({ prod }) {
           onClick={handleDelete}
         />
       </div>
+      {/* <Toaster/> */}
     </div>
   );
 }

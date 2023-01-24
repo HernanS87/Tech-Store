@@ -3,13 +3,16 @@ import { useAdminContext } from "../../context";
 import InputAlert from "./InputAlert";
 
 export default function InputFileCustom() {
-  const { uploadImage, form, setForm, error} = useAdminContext();
+  const { uploadImage, form, setForm, error, wrongImages, setWrongImages} = useAdminContext();
 
   const [drag, setDrag] = useState(false);
+  
   let imagesTemp = form.images;
 
   const uploadFiles = (dataFiles) => {
+    setWrongImages([])
     let files = [];
+    let wrongImagesTemp = []
     for (let img of dataFiles) {
       files.push(img);
     }
@@ -22,7 +25,8 @@ export default function InputFileCustom() {
           images: [...imagesTemp],
         });
       } else {
-        alert(`No puedes cargar "${el.name}" porque no es una imágen`);
+        wrongImagesTemp.push(`No puedes cargar "${el.name}" porque no es una imágen`)
+        setWrongImages(wrongImagesTemp)
       }
     });
   };
@@ -32,14 +36,15 @@ export default function InputFileCustom() {
       ...form,
       images: form.images.filter((url) => url !== urlToDelete),
     });
+    setWrongImages([])
   };
 
   return (
     <div className="images-container">
-      <label htmlFor="images">
+      <span >
         Selecciona las imágenes de tu producto{" "}
-        <span className="cursor-pointer text-blue-600">aquí</span>
-      </label>
+        <label htmlFor="images" className="cursor-pointer text-blue-600">aquí</label>
+      </span>
       <input
         type="file"
         className="hidden"
@@ -109,6 +114,7 @@ export default function InputFileCustom() {
         </div>
       </div>
       <InputAlert msg={error.images} />
+      {(wrongImages.length > 0) && <>{wrongImages.map((msg, i) => <InputAlert key={i} msg={msg} />)}</>}
     </div>
   );
 }

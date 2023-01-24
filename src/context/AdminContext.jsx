@@ -4,6 +4,7 @@ import { createContext, useContext, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../constants";
 import { v4 } from "uuid";
+import { toast } from "react-hot-toast";
 
 const AdminContext = createContext();
 
@@ -91,6 +92,7 @@ export const AdminContextProvider = ({ children }) => {
   };
 
   const [error, setError] = useState({});
+  const [wrongImages, setWrongImages] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -103,6 +105,7 @@ export const AdminContextProvider = ({ children }) => {
   const resetForm = () => {
     setForm(initialState);
     setError({});
+    setWrongImages([]);
   };
 
   const handleSubmit = (e) => {
@@ -117,10 +120,20 @@ export const AdminContextProvider = ({ children }) => {
         updateDoc(prodRef, {
           ...form,
         });
+        toast.success(`Editaste "${form.name}" de tu stock`, {
+          duration: 3000,
+          position: "top-center",
+          className: 'bg-green-400 text-white ',
+        });
       } else {
         const stockRef = doc(db, "Stock", `${e.target.name.value}`);
         setDoc(stockRef, {
           ...form,
+        });
+        toast.success(`Agregaste "${form.name}" a tu stock`, {
+          duration: 3000,
+          position: "top-center",
+          className: 'bg-green-400 text-white ',
         });
       }
 
@@ -144,6 +157,8 @@ export const AdminContextProvider = ({ children }) => {
         handleSubmit,
         setForm,
         setError,
+        wrongImages,
+        setWrongImages,
         resetForm,
         uploadImage,
         detailPopup,
