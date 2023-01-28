@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { useAdminContext } from "../../context";
 
@@ -13,6 +14,7 @@ export default function Sidebar() {
           <Link
             to="/admin/stock"
             onClick={() => {
+              toast.dismiss();
               resetForm();
             }}
           >
@@ -20,7 +22,14 @@ export default function Sidebar() {
           </Link>
         </li>
         <li className="px-2 my-2 text-center">
-          <Link to="/admin/form">Añadir Producto</Link>
+          <Link
+            to="/admin/form"
+            onClick={() => {
+              toast.dismiss();
+            }}
+          >
+            Añadir Producto
+          </Link>
         </li>
         <li className="px-2 my-2 text-center">
           <button>Cerrar</button>

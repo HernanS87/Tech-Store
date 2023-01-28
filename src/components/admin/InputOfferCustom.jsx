@@ -35,7 +35,6 @@ export default function InputOfferCustom() {
               placeholder="10"
               disabled={!form.offer}
               className="w-8 h-7 pr-1 text-right outline-none"
-              required
               onChange={handleChange}
             />
             <span className="cursor-default">%</span>

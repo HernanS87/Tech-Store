@@ -4,9 +4,12 @@ import { useAdminContext } from "../../context";
 import { db } from "../../constants";
 import { deleteDoc, doc } from "firebase/firestore";
 import { toast, Toaster } from "react-hot-toast";
+import { useState } from "react";
+import DeletePopup from "./DeletePopup";
 
 export default function Stock({ prod }) {
   const { setDetailPopup, setForm } = useAdminContext();
+  const [state, setState] = useState(false)
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -16,27 +19,6 @@ export default function Stock({ prod }) {
   };
 
   const handleDelete = () => {
-    let answer = confirm(
-      `¿Estas seguro que quieres eliminar ${prod.name} de tu stock?`
-    );
-    // let answer = false;
-    // toast.custom(
-    //   <div className="bg-white">
-    //     ¿Estas seguro que quieres eliminar ${prod.name} de tu stock?
-    //     <button
-    //       onClick={() => {
-    //         answer = true;
-    //         toast.dismiss()
-    //       }}
-    //     >
-    //       Aceptar
-    //     </button>
-    //     <button onClick={() => {
-    //       toast.dismiss()
-    //     }}>Cancelar</button>
-    //   </div>
-    // );
-    if (answer) {
       console.log("Se eliminó", prod.name);
       toast.error(`Eliminaste "${prod.name}" de tu stock`, {
         duration: 3000,
@@ -44,7 +26,7 @@ export default function Stock({ prod }) {
         className: "bg-red-400 text-white ",
       });
       deleteDoc(doc(db, "Stock", prod.id));
-    }
+    
   };
 
   return (
@@ -126,10 +108,12 @@ export default function Stock({ prod }) {
         <MdDeleteForever
           size={30}
           className="text-blue-700 cursor-pointer"
-          onClick={handleDelete}
+          onClick={() => {
+            setState(true)
+          }}
         />
       </div>
-      {/* <Toaster/> */}
+      {state && <DeletePopup setState={setState} handleDelete={handleDelete} name={prod.name}/>}
     </div>
   );
 }

@@ -43,6 +43,7 @@ export const AdminContextProvider = ({ children }) => {
     let regexName = /^.{4,200}$/;
     let regexPrice = /^[1-9]\d*$/;
     let regexComments = /^.{0,255}$/;
+    let regexEnteros = /^\d+$/;
 
     if (!form.name.trim()) {
       errors.name = 'El campo "Nombre" es requerido';
@@ -78,7 +79,15 @@ export const AdminContextProvider = ({ children }) => {
       validate = false;
     }
 
-    if (form.offer && (form.percent > 100 || form.percent < 1)) {
+    if (form.offer && form.percent === "") {
+      errors.percent = "Este campo es requerido si quieres añadir una oferta";
+      validate = false;
+    } else if (
+      form.offer &&
+      (form.percent > 100 ||
+        form.percent < 1 ||
+        !regexEnteros.test(form.percent))
+    ) {
       errors.percent = "Debes colocar un numero entero entre 1 y 100";
       validate = false;
     }
@@ -123,7 +132,7 @@ export const AdminContextProvider = ({ children }) => {
         toast.success(`Editaste "${form.name}" de tu stock`, {
           duration: 3000,
           position: "top-center",
-          className: 'bg-green-400 text-white ',
+          className: "bg-green-400 text-white ",
         });
       } else {
         const stockRef = doc(db, "Stock", `${e.target.name.value}`);
@@ -133,7 +142,7 @@ export const AdminContextProvider = ({ children }) => {
         toast.success(`Agregaste "${form.name}" a tu stock`, {
           duration: 3000,
           position: "top-center",
-          className: 'bg-green-400 text-white ',
+          className: "bg-green-400 text-white ",
         });
       }
 
