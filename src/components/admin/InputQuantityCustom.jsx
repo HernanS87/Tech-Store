@@ -1,5 +1,5 @@
 import { useAdminContext } from "../../context";
-import InputAlert from "./InputAlert";
+import ErrorMsg from "../ErrorMsg";
 
 export default function InputQuantityCustom() {
   const { form, setForm, handleChange, error } = useAdminContext();
@@ -54,7 +54,7 @@ export default function InputQuantityCustom() {
           </button>
         </div>
       </div>
-      <InputAlert msg={error.quantity} />
+      <ErrorMsg msg={error.quantity} />
     </div>
   );
 }

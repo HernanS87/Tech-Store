@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAdminContext } from "../../context";
-import InputAlert from "./InputAlert";
+import ErrorMsg from "../ErrorMsg";
 
 export default function InputFileCustom() {
   const { uploadImage, form, setForm, error, wrongImages, setWrongImages} = useAdminContext();
@@ -113,8 +113,8 @@ export default function InputFileCustom() {
           )}
         </div>
       </div>
-      <InputAlert msg={error.images} />
-      {(wrongImages.length > 0) && <>{wrongImages.map((msg, i) => <InputAlert key={i} msg={msg} />)}</>}
+      <ErrorMsg msg={error.images} />
+      {(wrongImages.length > 0) && <>{wrongImages.map((msg, i) => <ErrorMsg key={i} msg={msg} />)}</>}
     </div>
   );
 }

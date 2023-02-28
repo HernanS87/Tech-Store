@@ -1,49 +1,39 @@
-import { About, Home, Admin, AdminForm, AdminStock } from "./pages";
+import { Home, Login, AdminForm, AdminStock, Register } from "./pages";
 import { Routes, Route } from "react-router-dom";
-import {Header, Sidebar} from "./components/";
+import { Header} from "./components/";
 
 function App() {
   return (
     <main>
       <Routes>
+        <Route path="/*" element={<h1>Not Found 404</h1>}/>
         <Route
           path="/"
           element={
             <>
-              <Header />
               <Home />
             </>
           }
         />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        
         <Route
-          path="/about"
+          path="/admin/form"
           element={
             <>
-              <Header />
-              <About />
+              <AdminForm />
             </>
           }
         />
-        <Route path="/admin/" element={<Admin />}>
-          <Route
-            path="form"
-            element={
-              <>
-                <Sidebar />
-                <AdminForm />
-              </>
-            }
-          />
-          <Route
-            path="stock"
-            element={
-              <>
-                <Sidebar />
-                <AdminStock />
-              </>
-            }
-          />
-        </Route>
+        <Route
+          path="/admin/stock"
+          element={
+            <>
+              <AdminStock />
+            </>
+          }
+        />
       </Routes>
     </main>
   );

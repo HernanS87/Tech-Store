@@ -4,7 +4,8 @@ import {
   InputFileCustom,
   InputQuantityCustom,
   InputOfferCustom,
-  InputAlert,
+  ErrorMsg,
+  Sidebar,
 } from "../components";
 import { Toaster } from "react-hot-toast";
 
@@ -14,6 +15,7 @@ export default function AdminForm() {
 
   return (
     <>
+      <Sidebar />
       <form
         className="p-2 flex flex-col flex-1 min-h-screen bg-slate-400 pl-40"
         onSubmit={handleSubmit}
@@ -29,7 +31,7 @@ export default function AdminForm() {
           onChange={handleChange}
         />
 
-        <InputAlert msg={error.name} />
+        <ErrorMsg msg={error.name} />
         <label htmlFor="category">Selecciona una categoría</label>
         <select
           id="category"
@@ -46,7 +48,7 @@ export default function AdminForm() {
             </option>
           ))}
         </select>
-        <InputAlert msg={error.category} />
+        <ErrorMsg msg={error.category} />
         <div className="flex justify-center my-2">
           <div className="flex flex-wrap items-center justify-between py-4 w-full sm:w-3/4 md-920-w-66 lg:w-3/5 ">
             <InputPriceCustom />
@@ -67,7 +69,7 @@ export default function AdminForm() {
           value={form.description}
           onChange={handleChange}
         ></textarea>
-        <InputAlert msg={error.description} />
+        <ErrorMsg msg={error.description} />
 
         <InputFileCustom />
         <button
@@ -76,6 +78,7 @@ export default function AdminForm() {
         >
           {form.id ? "Editar" : "Guardar"}
         </button>
+        <Toaster />
       </form>
     </>
   );

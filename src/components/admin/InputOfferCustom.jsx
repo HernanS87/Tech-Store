@@ -1,5 +1,5 @@
 import { useAdminContext } from "../../context";
-import InputAlert from "./InputAlert";
+import ErrorMsg from "../ErrorMsg";
 
 export default function InputOfferCustom() {
   const { form, setForm, handleChange, error } = useAdminContext();
@@ -39,7 +39,7 @@ export default function InputOfferCustom() {
             />
             <span className="cursor-default">%</span>
           </div>
-          <InputAlert msg={error.percent} />
+          <ErrorMsg msg={error.percent} />
         </div>
         <div className="ml-5">
           <input

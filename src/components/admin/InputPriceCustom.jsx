@@ -1,5 +1,5 @@
 import { useAdminContext } from "../../context";
-import InputAlert from "./InputAlert";
+import ErrorMsg from "../ErrorMsg";
 
 export default function InputPriceCustom() {
   const { form, handleChange, error } = useAdminContext();
@@ -18,7 +18,7 @@ export default function InputPriceCustom() {
           onChange={handleChange}
         />
       </div>
-      <InputAlert msg={error.price} />
+      <ErrorMsg msg={error.price} />
     </div>
   );
 }
