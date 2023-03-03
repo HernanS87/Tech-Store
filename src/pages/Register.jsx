@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { PacmanLoader } from "react-spinners";
 import { ErrorMsg } from "../components";
 import { useAuthContext } from "../context";
 
-
 export default function Register() {
-  const { signup } = useAuthContext();
+  const { signup, loading, setLoading, currentUser } = useAuthContext();
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
@@ -17,29 +17,36 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     try {
+      setLoading(true);
+      setError("");
       await signup(user.email, user.password);
       navigate("/");
     } catch (error) {
-      if(error.code === 'auth/invalid-email'){
-        setError('Email no válido');
-      } else if (error.code === 'auth/weak-password') {
-        setError('La contraseña debe tener al menos 6 dígitos')
-      } else if (error.code === 'auth/internal-error') {
-        setError('Coloca una contraseña de al menos 6 dígitos')
-      } else if (error.code === 'auth/email-already-in-use') {
-        setError('Ya existe un usuario con este email. Intenta con otro')
+      if (error.code === "auth/invalid-email") {
+        setError("Email no válido");
+      } else if (error.code === "auth/weak-password") {
+        setError("La contraseña debe tener al menos 6 dígitos");
+      } else if (error.code === "auth/internal-error") {
+        setError("Coloca una contraseña de al menos 6 dígitos");
+      } else if (error.code === "auth/email-already-in-use") {
+        setError("Ya existe un usuario con este email. Intenta con otro");
       } else {
-        setError(error.code)
+        setError(error.code);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
+  return loading ? (
     <div className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
-      {error && <ErrorMsg msg={error}/>}
-      
+      <PacmanLoader color="#9b34cc" size={70} />
+    </div>
+  ) : !currentUser ? (
+    <div className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
+      {error && <ErrorMsg msg={error} />}
+
       <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -87,5 +94,5 @@ export default function Register() {
         </Link>
       </p>
     </div>
-  );
+  ) : < Navigate to={'/'} />
 }

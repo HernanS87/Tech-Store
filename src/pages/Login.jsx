@@ -1,7 +1,7 @@
 import { useAuthContext } from "../context";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { ErrorMsg } from "../components";
 
 export default function Login() {
@@ -9,10 +9,9 @@ export default function Login() {
     login,
     loginWithGoogle,
     resetPassword,
-    currentUser,
-    logout,
     loading,
     setLoading,
+    currentUser,
   } = useAuthContext();
   const navigate = useNavigate();
 
@@ -25,28 +24,29 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
     try {
+      setLoading(true);
+      setError("");
       await login(user.email, user.password);
       navigate("/");
     } catch (error) {
       if (error.code === "auth/wrong-password") {
         setError("Contraseña incorrecta");
-        setUser({...user, password : ""});
+        setUser({ ...user, password: "" });
       } else if (error.code === "auth/internal-error") {
         setError("No olvides colocar tu contraseña");
       } else if (error.code === "auth/user-not-found") {
         setError("No existe un usuario con este email");
-        setUser({...user, password : ""});
+        setUser({ ...user, password: "" });
       } else setError(error.code);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleGoogleSigning = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       await loginWithGoogle();
       navigate("/");
     } catch (error) {
@@ -55,26 +55,27 @@ export default function Login() {
           "Cerraste muy pronto la ventana del login y no pudimos cargar tu usuario. Intenta de nuevo"
         );
       } else setError(error.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  // const handleResetPassword = async (e) => {
-  //   e.preventDefault();
-  //   if (!user.email) return setError("Write an email to reset password");
-  //   try {
-  //     await resetPassword(user.email);
-  //     setError("We sent you an email. Check your inbox");
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    if (!user.email) return setError("Write an email to reset password");
+    try {
+      await resetPassword(user.email);
+      setError("We sent you an email. Check your inbox");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return loading ? (
     <div className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
       <PacmanLoader color="#9b34cc" size={70} />
     </div>
-  ) : (
+  ) : !currentUser ? (
     <div className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
       {error && <ErrorMsg msg={error} />}
       <form
@@ -125,7 +126,7 @@ export default function Login() {
           <button
             className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
             href="#!"
-            // onClick={handleResetPassword}
+            onClick={handleResetPassword}
           >
             Forgot Password?
           </button>
@@ -146,44 +147,7 @@ export default function Login() {
         Google Login
       </button>
     </div>
+  ) : (
+    <Navigate to={"/"} />
   );
-  // const { currentUser, loginWithGoogle, logout, loading, setLoading } =
-  //   useAuthContext();
-  // // console.log('usuario actual', currentUser)
-  // return loading ? (
-  //   <div className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
-  //     <PacmanLoader color="#9b34cc" size={70} />
-  //   </div>
-  // ) : (
-  //   <section className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
-  //     {/* Acá tengo que hacer el login para editar el stock */}
-  //     <div className="my-8">
-  //       {currentUser
-  //         ? currentUser.name != null
-  //           ? `${currentUser.name} esta logueado`
-  //           : `${currentUser.email} esta logueado`
-  //         : "No hay nadie logueado"}
-  //     </div>
-  //     {!currentUser ? (
-  //       <button
-  //         className="border rounded bg-blue-500 px-2 py-1"
-  //         onClick={() => {
-  //           loginWithGoogle();
-  //           setLoading(true);
-  //         }}
-  //       >
-  //         Entrar como invitado
-  //       </button>
-  //     ) : (
-  //       <button
-  //         className="border rounded bg-blue-500 px-2 py-1"
-  //         onClick={() => {
-  //           logout();
-  //         }}
-  //       >
-  //         Salir
-  //       </button>
-  //     )}
-  //   </section>
-  // );
 }

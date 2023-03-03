@@ -1,6 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../constants";
-import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import {
   onAuthStateChanged,
   signOut,
@@ -10,6 +18,7 @@ import {
   signInWithEmailAndPassword,
   linkWithCredential,
   EmailAuthProvider,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 const AuthContext = createContext();
@@ -26,20 +35,23 @@ export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Funcion que me carga el nuevo usuario en firestore
-  const createNewUser = async (user, method, password = undefined) => {
+  // Funcion que me carga el nuevo usuario en la db y actualiza el currentUser
+  const createNewUser = async (user, method, password = null) => {
     console.log("Usuario nuevo creado");
-    const ref = collection(db, "Users");
-    await addDoc(ref, {
+    const newUser = {
       name: user.displayName,
       email: user.email,
       role: "client",
       photo: user.photoURL,
       method: [method],
       password: password,
-    });
+    };
+    setCurrentUser(newUser);
+    const ref = collection(db, "Users");
+    await addDoc(ref, newUser);
   };
 
+  // Funcion que busca el usuario en la db y lo retorna o devuelve null
   const checkUser = async (user) => {
     const q = query(collection(db, "Users"), where("email", "==", user.email));
     let userFromDB = null;
@@ -59,55 +71,52 @@ export const AuthContextProvider = ({ children }) => {
       email,
       password
     );
-    await createNewUser(user, 'password', password);
+    await createNewUser(user, "password", password);
   };
 
   const login = async (email, password) => {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
-    setCurrentUser(await checkUser(user));
+    const userFromDB = await checkUser(user);
+    setCurrentUser(userFromDB);
+    if (userFromDB.password !== password) {
+      const userRef = doc(db, `Users/${userFromDB.id}`);
+      await updateDoc(userRef, {
+        ...userFromDB,
+        password: password,
+      });
+    }
   };
 
   const loginWithGoogle = async () => {
-    try {
-      console.log("ejecutando loginGoogle");
-      const provider = new GoogleAuthProvider();
+    console.log("ejecutando loginGoogle");
+    const provider = new GoogleAuthProvider();
 
-      const { user } = await signInWithPopup(auth, provider);
+    const { user } = await signInWithPopup(auth, provider);
 
-      const userFromDB = await checkUser(user);
+    const userFromDB = await checkUser(user);
 
-      if (userFromDB) {
-        if (
-          userFromDB.method.length == 1 &&
-          userFromDB.method[0] === "password"
-        ) {
-          const credential = EmailAuthProvider.credential(
-            userFromDB.email,
-            userFromDB.password
-          );
-          console.log("CREDENCIALES", credential);
-          await linkWithCredential(user, credential);
-          const userRef = doc(db, `Users/${userFromDB.id}`);
-          await updateDoc(userRef, {
-          ...userFromDB, method: ['password', 'google']
+    if (userFromDB) {
+      if (
+        userFromDB.method.length === 1 &&
+        userFromDB.method[0] === "password"
+      ) {
+        const credential = EmailAuthProvider.credential(
+          userFromDB.email,
+          userFromDB.password
+        );
+        console.log("CREDENCIALES", credential);
+        await linkWithCredential(user, credential);
+        const userRef = doc(db, `Users/${userFromDB.id}`);
+        await updateDoc(userRef, {
+          ...userFromDB,
+          method: ["password", "google"],
         });
-          setCurrentUser(userFromDB);
-        } else {
-          setCurrentUser(userFromDB);
-        }
+        setCurrentUser(userFromDB);
       } else {
-        setCurrentUser({
-          name: user.displayName,
-          email: user.email,
-          role: "client",
-          photo: user.photoURL,
-          method: ["google"],
-          password: undefined,
-        });
-        createNewUser(user, "google");
+        setCurrentUser(userFromDB);
       }
-    } catch (error) {
-      console.log("error de loginGoogle", error);
+    } else {
+      createNewUser(user, "google");
     }
   };
 
@@ -116,11 +125,12 @@ export const AuthContextProvider = ({ children }) => {
     return signOut(auth);
   };
 
+  const resetPassword = (email) => sendPasswordResetEmail(auth, email);
+
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       console.log("useEffect", user);
       if (user != null) {
-        console.log("ejecutando checkUser");
         setCurrentUser(await checkUser(user));
       }
       setLoading(false);
@@ -137,10 +147,10 @@ export const AuthContextProvider = ({ children }) => {
         setLoading,
         signup,
         login,
+        resetPassword,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
-
