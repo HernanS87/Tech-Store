@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { PacmanLoader } from "react-spinners";
+import { Link, useNavigate } from "react-router-dom";
 import { ErrorMsg } from "../components";
 import { useAuthContext } from "../context";
 
 export default function Register() {
-  const { signup, loading, setLoading, currentUser } = useAuthContext();
+  const { signup, setLoading } = useAuthContext();
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
@@ -39,11 +38,7 @@ export default function Register() {
     }
   };
 
-  return loading ? (
-    <div className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
-      <PacmanLoader color="#9b34cc" size={70} />
-    </div>
-  ) : !currentUser ? (
+  return (
     <div className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
       {error && <ErrorMsg msg={error} />}
 
@@ -94,5 +89,5 @@ export default function Register() {
         </Link>
       </p>
     </div>
-  ) : < Navigate to={'/'} />
+  );
 }

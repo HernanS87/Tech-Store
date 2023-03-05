@@ -1,36 +1,46 @@
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { useAdminContext } from "../../context";
+import { useAdminContext, useAuthContext } from "../../context";
 import { db } from "../../constants";
 import { deleteDoc, doc } from "firebase/firestore";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useState } from "react";
 import DeletePopup from "./DeletePopup";
 
 export default function Stock({ prod }) {
   const { setDetailPopup, setForm } = useAdminContext();
-  const [state, setState] = useState(false)
+  const { currentUser } = useAuthContext();
+  const [state, setState] = useState(false);
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    console.log(prod);
-    setForm(prod);
-    navigate("/admin/form");
+    if (prod.access || currentUser.role === "admin") {
+      console.log(prod);
+      setForm(prod);
+      navigate("/admin/form");
+    } else {
+      alert("No tienes permiso para editar este producto");
+    }
   };
 
   const handleDelete = () => {
-      console.log("Se eliminó", prod.name);
-      toast.error(`Eliminaste "${prod.name}" de tu stock`, {
-        duration: 3000,
-        position: "top-center",
-        className: "bg-red-400 text-white ",
-      });
-      deleteDoc(doc(db, "Stock", prod.id));
-    
+    console.log("Se eliminó", prod.name);
+    toast.error(`Eliminaste "${prod.name}" de tu stock`, {
+      duration: 3000,
+      position: "top-center",
+      className: "bg-red-400 text-white ",
+    });
+    deleteDoc(doc(db, "Stock", prod.id));
   };
 
   return (
-    <div className="card bg-white flex justify-between flex-1 w-3/4 m-auto py-2 px-4 border-b first:rounded-t last:rounded-b  ">
+    <div className="card bg-white flex justify-between flex-1 w-3/4 m-auto py-2 px-4 border-b first:rounded-t last:rounded-b relative">
+      {!prod.access && (
+        <span className="text-xs px-1 bg-yellow-400 text-white absolute right-1 bottom-1 rounded font-medium">
+          Restringido
+        </span>
+      )}
+
       <div className="min-w-fit flex flex-col justify-center">
         <img
           src={prod.images[0]}
@@ -109,11 +119,21 @@ export default function Stock({ prod }) {
           size={30}
           className="text-blue-700 cursor-pointer"
           onClick={() => {
-            setState(true)
+            if (prod.access || currentUser.role === "admin") {
+              setState(true);
+            } else {
+              alert("No tienes permiso para eliminar este producto");
+            }
           }}
         />
       </div>
-      {state && <DeletePopup setState={setState} handleDelete={handleDelete} name={prod.name}/>}
+      {state && (
+        <DeletePopup
+          setState={setState}
+          handleDelete={handleDelete}
+          name={prod.name}
+        />
+      )}
     </div>
   );
 }

@@ -33,6 +33,7 @@ export const AdminContextProvider = ({ children }) => {
     percent: "",
     description: "",
     images: [],
+    access: true,
   };
 
   const [form, setForm] = useState(initialState);

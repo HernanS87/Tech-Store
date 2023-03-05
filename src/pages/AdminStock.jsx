@@ -22,7 +22,6 @@ export default function AdminStock() {
   };
 
   useEffect(() => {
-    console.log("se ejecuta");
     getProd();
   }, []);
 

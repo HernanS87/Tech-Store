@@ -1,6 +1,7 @@
 export { default as Carousel } from './Carousel';
 export { default as ErrorMsg } from './ErrorMsg';
 export { default as Header } from './Header';
+export { default as ProtectedRoutes } from './ProtectedRoutes';
 export { default as DeletePopup } from './admin/DeletePopup';
 export { default as DetailPopup } from './admin/DetailPopup';
 export { default as InputFileCustom } from './admin/InputFileCustom';

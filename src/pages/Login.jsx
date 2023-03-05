@@ -1,7 +1,6 @@
 import { useAuthContext } from "../context";
-import PacmanLoader from "react-spinners/PacmanLoader";
 import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ErrorMsg } from "../components";
 
 export default function Login() {
@@ -9,9 +8,7 @@ export default function Login() {
     login,
     loginWithGoogle,
     resetPassword,
-    loading,
     setLoading,
-    currentUser,
   } = useAuthContext();
   const navigate = useNavigate();
 
@@ -71,11 +68,7 @@ export default function Login() {
     }
   };
 
-  return loading ? (
-    <div className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
-      <PacmanLoader color="#9b34cc" size={70} />
-    </div>
-  ) : !currentUser ? (
+  return (
     <div className="flex flex-col items-center justify-center bg-gray-200 min-h-screen">
       {error && <ErrorMsg msg={error} />}
       <form
@@ -147,7 +140,5 @@ export default function Login() {
         Google Login
       </button>
     </div>
-  ) : (
-    <Navigate to={"/"} />
   );
 }
