@@ -1,5 +1,5 @@
 import { db } from "../constants";
-import { doc, updateDoc, setDoc } from "firebase/firestore";
+import { doc, updateDoc, setDoc, collection, addDoc } from "firebase/firestore";
 import { createContext, useContext, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../constants";
@@ -118,7 +118,7 @@ export const AdminContextProvider = ({ children }) => {
     setWrongImages([]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const err = validationsForm(form);
 
@@ -137,6 +137,10 @@ export const AdminContextProvider = ({ children }) => {
         });
       } else {
         const stockRef = doc(db, "Stock", `${e.target.name.value}`);
+        // const adminRef = collection(db, `admin1/stock/categories/${form.category}/products`);
+        // await addDoc(adminRef,{
+        //     ...form,
+        //   })
         setDoc(stockRef, {
           ...form,
         });
